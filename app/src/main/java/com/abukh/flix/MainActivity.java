@@ -8,6 +8,7 @@ import okhttp3.Headers;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.abukh.flix.adapters.MovieAdapter;
 import com.abukh.flix.models.Movie;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;

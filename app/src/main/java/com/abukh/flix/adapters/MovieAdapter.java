@@ -1,4 +1,4 @@
-package com.abukh.flix;
+package com.abukh.flix.adapters;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.abukh.flix.R;
 import com.abukh.flix.models.Movie;
 import com.bumptech.glide.Glide;
 
