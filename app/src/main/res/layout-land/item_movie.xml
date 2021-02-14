@@ -12,7 +12,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@drawable/placeholder_image"
+        tools:srcCompat="@drawable/placeholder_image" />
 
     <TextView
         android:id="@+id/tvTitle"
@@ -23,16 +24,18 @@
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/ivPoster"
         android:textSize="24sp"
+        android:textColor="@android:color/white"
         tools:text="KIMI NO NA WA" />
 
     <TextView
         android:id="@+id/tvOverview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_below="@+id/tvTitle"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
+        android:layout_marginRight="7dp"
         android:layout_toEndOf="@+id/ivPoster"
+        android:textColor="#B3FFFFFF"
         tools:text="Two teenagers share a profound, magical connection upon discovering they are swapping bodies. But things become even more complicated when the boy and girl decide to meet in person." />
 </RelativeLayout>

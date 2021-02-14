@@ -18,8 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private final int POPULAR = 1, UNPOPULAR = 0;
     Context context; // context to where the rv is actually being created
     List<Movie> movies; // our model
 
@@ -28,26 +29,55 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         this.movies = movies;
     }
 
-    // Inflates a layout from XML (in our case item_movie.xml) and returns it inside the ViewHolder
-    @NonNull
+    //Returns the view type of the item at position for the purposes of view recycling.
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View movieView = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
+    public int getItemViewType(int position) {
 
-        return new ViewHolder(movieView); // wrap the movieView inside our ViewHolder and return it
+        if (movies.get(position).getRating() > 7) {
+            return POPULAR;
+        }
+
+        return UNPOPULAR;
+
     }
 
-    // Involves populating the data into the item through the ViewHolder
+    // Inflates a layout from XML (in our case item_movie.xml) and returns it inside the ViewHolder
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        // we have the 'position' of the data so we take the data at that position and put it into the View contained inside the ViewHolder
+        View movieView;
+        RecyclerView.ViewHolder viewHolder;
 
-        // get the movie at the position
+        if (viewType == POPULAR) {
+            movieView = LayoutInflater.from(context).inflate(R.layout.item_movie_popular, parent, false);
+            viewHolder = new ViewHolder2(movieView);
+        } else {
+            movieView = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
+            viewHolder = new ViewHolder1(movieView);
+        }
+
+        return viewHolder; // wrap the appropriate movieView inside our ViewHolder and return it
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+
         Movie movie = movies.get(position);
 
-        // bind the movie data into the ViewHolder (take data from movie and populate each elements in the ViewHolder
-        holder.bind(movie);
+        if (holder.getItemViewType() == UNPOPULAR) {
+
+            ViewHolder1 vh1 = (ViewHolder1) holder;
+
+            // bind the movie data into the ViewHolder (take data from movie and populate each elements in the ViewHolder)
+            vh1.bind(movie);
+        } else {
+
+            ViewHolder2 vh2 = (ViewHolder2) holder;
+
+            vh2.loadBackdrop(movie.getBackdropPath());
+
+        }
+
     }
 
     // Return the total count of items in the list
@@ -57,13 +87,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     }
 
     // "ViewHolder" is the repr of one row in the RV.
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder1 extends RecyclerView.ViewHolder {
 
         TextView tvTitle;
         TextView tvOverview;
         ImageView ivPoster;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder1(@NonNull View itemView) {
             super(itemView);
 
             tvTitle = itemView.findViewById(R.id.tvTitle);
@@ -89,4 +119,20 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         }
     }
 
+    public class ViewHolder2 extends RecyclerView.ViewHolder {
+
+        private ImageView ivBackdrop;
+
+        public ViewHolder2(@NonNull View itemView) {
+
+            super(itemView);
+
+            ivBackdrop = itemView.findViewById(R.id.ivBackdrop);
+
+        }
+
+        public void loadBackdrop(String backdropPath) {
+            Glide.with(context).load(backdropPath).placeholder(R.drawable.placeholder_image).into(ivBackdrop);
+        }
+    }
 }
