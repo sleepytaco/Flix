@@ -1,16 +1,23 @@
 package com.abukh.flix.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Parcel;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.abukh.flix.DetailActivity;
 import com.abukh.flix.R;
 import com.abukh.flix.models.Movie;
 import com.bumptech.glide.Glide;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -74,7 +81,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             ViewHolder2 vh2 = (ViewHolder2) holder;
 
-            vh2.loadBackdrop(movie.getBackdropPath());
+            vh2.loadBackdrop(movie);
 
         }
 
@@ -86,12 +93,13 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return movies.size();
     }
 
-    // "ViewHolder" is the repr of one row in the RV.
+    // "ViewHolder" is literal the representation of one row of movie in the RV
     public class ViewHolder1 extends RecyclerView.ViewHolder {
 
         TextView tvTitle;
         TextView tvOverview;
         ImageView ivPoster;
+        RelativeLayout container;
 
         public ViewHolder1(@NonNull View itemView) {
             super(itemView);
@@ -99,6 +107,8 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvOverview = itemView.findViewById(R.id.tvOverview);
             ivPoster = itemView.findViewById(R.id.ivPoster);
+            container = itemView.findViewById(R.id.container);
+
         }
 
         public void bind(Movie movie) {
@@ -116,9 +126,23 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
 
             Glide.with(context).load(imageUrl).placeholder(R.drawable.placeholder_image).into(ivPoster);
+
+            // 1. Register an onclick listener on the whole row, so when a user clicks on a movie row they are taken to another activity
+            container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Toast.makeText(context, movie.getTitle(), Toast.LENGTH_LONG).show();
+
+                    // 2. Navigate to a new activity on tap
+                    Intent intent = new Intent(context, DetailActivity.class);
+                    intent.putExtra("movie", Parcels.wrap(movie));
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 
+    // viewholder for popular movies
     public class ViewHolder2 extends RecyclerView.ViewHolder {
 
         private ImageView ivBackdrop;
@@ -131,8 +155,21 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         }
 
-        public void loadBackdrop(String backdropPath) {
-            Glide.with(context).load(backdropPath).placeholder(R.drawable.placeholder_image).into(ivBackdrop);
+        public void loadBackdrop(Movie movie) {
+            Glide.with(context).load(movie.getBackdropPath()).placeholder(R.drawable.placeholder_image).into(ivBackdrop);
+
+            // 1. Register an onclick listener on the whole row, so when a user clicks on a movie row they are taken to another activity
+            ivBackdrop.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Toast.makeText(context, movie.getTitle(), Toast.LENGTH_LONG).show();
+
+                    // 2. Navigate to a new activity on tap
+                    Intent intent = new Intent(context, DetailActivity.class);
+                    intent.putExtra("movie", Parcels.wrap(movie));
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 }

@@ -3,10 +3,12 @@ package com.abukh.flix.models;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Parcel
 public class Movie {
 
     private String posterPath;
@@ -14,6 +16,10 @@ public class Movie {
     private String title;
     private String overview;
     private double rating;
+
+    public Movie() {
+        // this empty constructor is needed by the Parceler Library
+    }
 
     public Movie(JSONObject jsonObject) throws JSONException {
         posterPath = jsonObject.getString("poster_path");
