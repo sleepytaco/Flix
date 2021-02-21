@@ -11,6 +11,7 @@ import java.util.List;
 @Parcel
 public class Movie {
 
+    private Integer movieID;
     private String posterPath;
     private String backdropPath;
     private String title;
@@ -22,6 +23,7 @@ public class Movie {
     }
 
     public Movie(JSONObject jsonObject) throws JSONException {
+        movieID = jsonObject.getInt("id");
         posterPath = jsonObject.getString("poster_path");
         backdropPath = jsonObject.getString("backdrop_path");
         title =  jsonObject.getString("title");
@@ -55,5 +57,9 @@ public class Movie {
 
     public double getRating() {
         return rating;
+    }
+
+    public Integer getMovieID() {
+        return movieID;
     }
 }
