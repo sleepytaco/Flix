@@ -6,6 +6,8 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
+    dataBinding.enabled = true
+
     defaultConfig {
         applicationId "com.abukh.flix"
         minSdkVersion 21
@@ -40,7 +42,9 @@ dependencies {
 
     implementation 'com.codepath.libraries:asynchttpclient:2.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
     implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'jp.wasabeef:glide-transformations:4.1.0' // supports glide transformations
 
     implementation 'org.parceler:parceler-api:1.1.12'
     annotationProcessor 'org.parceler:parceler:1.1.12'

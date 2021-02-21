@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/container">
+    android:id="@+id/container"
+    android:transitionName="profile">
 
     <ImageView
         android:id="@+id/ivPoster"
@@ -39,5 +40,6 @@
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/ivPoster"
         android:textColor="#B3FFFFFF"
+        android:transitionName="profile"
         tools:text="Two teenagers share a profound, magical connection upon discovering they are swapping bodies. But things become even more complicated when the boy and girl decide to meet in person." />
 </RelativeLayout>

@@ -1,6 +1,7 @@
 package com.abukh.flix;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import okhttp3.Headers;
 
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.abukh.flix.databinding.ActivityDetailBinding;
 import com.abukh.flix.models.Movie;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
@@ -24,31 +26,32 @@ public class DetailActivity extends YouTubeBaseActivity {
 
     private static final String YOUTUBE_API_KEY = "AIzaSyAjLqr22HpvF56-Zab_0NachOUbY_-7WrU";
     private static final String VIDEOS_URL = "https://api.themoviedb.org/3/movie/%d/videos?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
-
+    private int isPopularMovie = 0;
     TextView tvTitle;
     TextView tvOverview;
     RatingBar ratingBar;
 
     YouTubePlayerView youTubePlayerView;
-
+    private ActivityDetailBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        //setContentView(R.layout.activity_detail);
 
-        tvTitle = findViewById(R.id.tvTitle);
-        tvOverview = findViewById(R.id.tvOverview);
-        ratingBar = findViewById(R.id.ratingBar);
+        // Inflate the `activity_detail` layout
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
+
         youTubePlayerView = findViewById(R.id.player);
 
         // get data from the MainActivity
         Movie movie = Parcels.unwrap(getIntent().getParcelableExtra("movie"));
 
-        tvTitle.setText(movie.getTitle());
-        tvOverview.setText(movie.getOverview());
-        ratingBar.setRating((float) (movie.getRating() + 0));
+        binding.setMovie(movie);
 
+        if (movie.getRating() > 7) {
+            isPopularMovie = 1;
+        }
 
         // from the movie db API we want to get the video id of the trailer for the movie
         AsyncHttpClient client = new AsyncHttpClient();
@@ -81,6 +84,12 @@ public class DetailActivity extends YouTubeBaseActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        //To support reverse transitions when user clicks the device back button
+        finishAfterTransition();
+    }
+
     private void initializeYoutube(String youtubeKey) {
 
         if (youtubeKey.equals("")) {
@@ -91,6 +100,10 @@ public class DetailActivity extends YouTubeBaseActivity {
         youTubePlayerView.initialize(YOUTUBE_API_KEY, new YouTubePlayer.OnInitializedListener() {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
+                if (isPopularMovie == 1) { // play video automatically for popular movies
+                    youTubePlayer.loadVideo(youtubeKey);
+                    return;
+                }
                 youTubePlayer.cueVideo(youtubeKey);
             }
 

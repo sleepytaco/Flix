@@ -1,5 +1,6 @@
 package com.abukh.flix.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -8,11 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.abukh.flix.DetailActivity;
+import com.abukh.flix.MainActivity;
 import com.abukh.flix.R;
 import com.abukh.flix.models.Movie;
 import com.bumptech.glide.Glide;
@@ -22,8 +25,10 @@ import org.parceler.Parcels;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -72,17 +77,14 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         Movie movie = movies.get(position);
 
         if (holder.getItemViewType() == UNPOPULAR) {
-
             ViewHolder1 vh1 = (ViewHolder1) holder;
 
             // bind the movie data into the ViewHolder (take data from movie and populate each elements in the ViewHolder)
             vh1.bind(movie);
         } else {
-
             ViewHolder2 vh2 = (ViewHolder2) holder;
 
             vh2.loadBackdrop(movie);
-
         }
 
     }
@@ -108,7 +110,6 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             tvOverview = itemView.findViewById(R.id.tvOverview);
             ivPoster = itemView.findViewById(R.id.ivPoster);
             container = itemView.findViewById(R.id.container);
-
         }
 
         public void bind(Movie movie) {
@@ -125,7 +126,10 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 imageUrl = movie.getPosterPath();
             }
 
-            Glide.with(context).load(imageUrl).placeholder(R.drawable.placeholder_image).into(ivPoster);
+            Glide.with(context).load(imageUrl)
+                    .transform(new RoundedCornersTransformation(40, 0))
+                    .placeholder(R.drawable.placeholder_image)
+                    .into(ivPoster);
 
             // 1. Register an onclick listener on the whole row, so when a user clicks on a movie row they are taken to another activity
             container.setOnClickListener(new View.OnClickListener() {
@@ -136,7 +140,9 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     // 2. Navigate to a new activity on tap
                     Intent intent = new Intent(context, DetailActivity.class);
                     intent.putExtra("movie", Parcels.wrap(movie));
-                    context.startActivity(intent);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.
+                            makeSceneTransitionAnimation((Activity) context, (View) tvOverview, "profile");
+                    context.startActivity(intent,  options.toBundle());
                 }
             });
         }
@@ -146,17 +152,20 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public class ViewHolder2 extends RecyclerView.ViewHolder {
 
         private ImageView ivBackdrop;
+        private TextView tvOverview;
 
         public ViewHolder2(@NonNull View itemView) {
-
             super(itemView);
 
             ivBackdrop = itemView.findViewById(R.id.ivBackdrop);
-
+            tvOverview = itemView.findViewById(R.id.tvOverview);
         }
 
         public void loadBackdrop(Movie movie) {
-            Glide.with(context).load(movie.getBackdropPath()).placeholder(R.drawable.placeholder_image).into(ivBackdrop);
+            Glide.with(context).load(movie.getBackdropPath())
+                    .transform(new RoundedCornersTransformation(40, 10))
+                    .placeholder(R.drawable.placeholder_image)
+                    .into(ivBackdrop);
 
             // 1. Register an onclick listener on the whole row, so when a user clicks on a movie row they are taken to another activity
             ivBackdrop.setOnClickListener(new View.OnClickListener() {
