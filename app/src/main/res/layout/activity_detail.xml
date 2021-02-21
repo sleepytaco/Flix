@@ -23,7 +23,9 @@
         android:layout_height="wrap_content"
         android:text="@{movie.title}"
         tools:text="KIMI NO NA WA"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:layout_margin="10dp"/>
 
     <RatingBar
         android:id="@+id/ratingBar"
@@ -32,6 +34,9 @@
         android:layout_height="wrap_content"
         android:isIndicator="true"
         android:numStars="10"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="center"
         android:rating="@{(float) movie.rating}" />
 
     <TextView
@@ -40,6 +45,9 @@
         android:layout_height="wrap_content"
         android:transitionName="profile"
         android:text="@{movie.overview}"
+        android:layout_margin="10dp"
+        android:layout_gravity="center"
+        android:textSize="16sp"
         tools:text="Two teenagers share a profound, magical connection upon discovering they are swapping bodies. But things become even more complicated when the boy and girl decide to meet in person." />
 </LinearLayout>
 </layout>
