@@ -23,6 +23,13 @@ Flix is an app that allows users to browse movies from the [The Movie Database A
 
 ### App Walkthough GIF
 
+Here's a walkthrough of implemented user stories:
+
+<img src='walkthroughs/flix_part2_walkthrough_port.gif' title='Video Walkthrough in Portrait mode' width='' alt='Video Walkthrough in Portrait mode' />
+
+GIFs created with [LiceCap](http://www.cockos.com/licecap/).
+
+
 ### Notes
 - I used this [StackOverFlow answer](https://stackoverflow.com/questions/15354621/youtube-api-android-auto-start) to figure out how to automatically load a YouTube video.
 - To add a play icon overlay, I used another ImageView on top of the poster ImageView. Referred to this [StackOverFlow answer](https://stackoverflow.com/questions/11959841/how-to-place-an-imageview-on-top-of-another-imageview-in-android)
